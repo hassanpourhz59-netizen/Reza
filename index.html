@@ -2,1804 +2,598 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<meta name="theme-color" content="#070812">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090d18">
+<title>RJF8 Orders</title>
 
-<title>RJF8 — Creative Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+:root{
+  --bg:#090d18;
+  --panel:#131a2d;
+  --border:#ffffff13;
+  --text:#f4f6ff;
+  --muted:#9ca8c4;
+  --purple:#a99bff;
+  --mint:#5fe1ce;
 }
-
-html{
-    scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box}
 body{
-    font-family:Vazirmatn,Arial,sans-serif;
-    background:#070812;
-    color:#fff;
-    overflow-x:hidden;
-    line-height:1.8;
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 10% 0%,#7667ff23,transparent 40%),
+    radial-gradient(ellipse at 100% 40%,#35d2c411,transparent 35%),
+    var(--bg);
+  color:var(--text);
+  font-family:Vazirmatn,sans-serif;
 }
-
-/* =========================
-   BACKGROUND
-========================= */
-
-body:before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:.18;
-
-    background-image:
-        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-
-    background-size:45px 45px;
-
-    mask-image:linear-gradient(to bottom,#000,transparent 85%);
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1150px;margin:auto;padding:22px 16px 45px}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:26px
 }
-
-/* =========================
-   GLOBAL
-========================= */
-
-a{
-    text-decoration:none;
-    color:inherit;
-}
-
-button{
-    font-family:inherit;
-}
-
-.container{
-    width:min(1120px,92%);
-    margin:auto;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-header{
-    position:fixed;
-    z-index:100;
-    top:14px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:min(1080px,94%);
-    padding:12px 18px;
-
-    border:1px solid rgba(255,255,255,.1);
-
-    background:rgba(8,9,20,.7);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
-    border-radius:20px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    box-shadow:0 15px 50px rgba(0,0,0,.25);
-}
-
+.brand{display:flex;align-items:center;gap:12px}
 .logo{
-    font-size:24px;
-    font-weight:900;
-    letter-spacing:2px;
+  width:47px;height:47px;border-radius:15px;
+  display:grid;place-items:center;font-weight:800;color:#101426;
+  background:linear-gradient(135deg,#b9adff,#5fe1ce);
+  box-shadow:0 8px 28px #9284ff30
 }
-
-.logo span{
-    color:#7c5cff;
-}
-
-/* desktop nav */
-
-nav{
-    display:flex;
-    gap:24px;
-    color:#b9bbca;
-    font-size:14px;
-}
-
-nav a{
-    transition:.25s;
-}
-
-nav a:hover{
-    color:#fff;
-}
-
-/* =========================
-   HAMBURGER
-========================= */
-
-.menu-button{
-    width:44px;
-    height:44px;
-
-    border-radius:14px;
-
-    border:1px solid rgba(255,255,255,.1);
-
-    background:rgba(255,255,255,.045);
-
-    display:none;
-
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-}
-
-.menu-lines{
-    width:20px;
-}
-
-.menu-lines span{
-    display:block;
-    height:2px;
-    background:#fff;
-    margin:5px 0;
-    border-radius:5px;
-
-    transition:.3s;
-}
-
-.menu-button.active .menu-lines span:nth-child(1){
-    transform:translateY(7px) rotate(45deg);
-}
-
-.menu-button.active .menu-lines span:nth-child(2){
-    opacity:0;
-}
-
-.menu-button.active .menu-lines span:nth-child(3){
-    transform:translateY(-7px) rotate(-45deg);
-}
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-.mobile-menu{
-    position:fixed;
-
-    z-index:90;
-
-    top:84px;
-    right:3%;
-
-    width:min(330px,94%);
-
-    padding:12px;
-
-    border-radius:24px;
-
-    background:rgba(10,11,24,.78);
-
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
-
-    border:1px solid rgba(255,255,255,.1);
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.45),
-        inset 0 1px rgba(255,255,255,.05);
-
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(-15px) scale(.97);
-
-    transition:.3s;
-}
-
-.mobile-menu.open{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(0) scale(1);
-}
-
-.mobile-menu a{
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    padding:15px;
-
-    color:#bfc1cf;
-
-    border-radius:15px;
-
-    transition:.2s;
-}
-
-.mobile-menu a:hover{
-    background:rgba(124,92,255,.1);
-    color:#fff;
-}
-
-.menu-icon{
-    width:36px;
-    height:36px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:11px;
-
-    background:rgba(255,255,255,.05);
-
-    font-size:17px;
-}
-
-/* =========================
-   HERO
-========================= */
-
-.hero{
-    min-height:100vh;
-
-    display:flex;
-    align-items:center;
-
-    position:relative;
-
-    padding:120px 0 70px;
-}
-
-.orb{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(80px);
-    opacity:.45;
-    pointer-events:none;
-}
-
-.o1{
-    width:280px;
-    height:280px;
-    background:#673cff;
-    top:12%;
-    right:-80px;
-}
-
-.o2{
-    width:240px;
-    height:240px;
-    background:#00d9ff;
-    bottom:8%;
-    left:-80px;
-}
-
-.hero-content{
-    max-width:780px;
-    position:relative;
-}
-
-.badge{
-    display:inline-flex;
-
-    padding:7px 13px;
-
-    border:1px solid rgba(124,92,255,.45);
-
-    background:rgba(124,92,255,.09);
-
-    border-radius:999px;
-
-    color:#b9aaff;
-
-    font-size:13px;
-
-    margin-bottom:22px;
-}
-
-h1{
-    font-size:clamp(54px,11vw,118px);
-    line-height:.95;
-    letter-spacing:-4px;
-    font-weight:900;
-}
-
-.gradient{
-    background:linear-gradient(
-        90deg,
-        #fff,
-        #9d8aff,
-        #58e6ff
-    );
-
-    -webkit-background-clip:text;
-    background-clip:text;
-
-    color:transparent;
-}
-
-.hero p{
-    color:#a9adbd;
-    font-size:18px;
-    max-width:680px;
-    margin:28px 0;
-}
-
-.buttons{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-}
-
-.btn{
-    padding:13px 20px;
-
-    border-radius:14px;
-
-    font-weight:700;
-
-    border:1px solid rgba(255,255,255,.12);
-
-    transition:.25s;
-
-    cursor:pointer;
-}
-
-.primary{
-    background:#fff;
-    color:#080812;
-}
-
-.primary:hover{
-    transform:translateY(-3px);
-
-    box-shadow:
-        0 12px 40px rgba(255,255,255,.15);
-}
-
-.secondary{
-    background:rgba(255,255,255,.04);
-    color:#fff;
-}
-
-.secondary:hover{
-    background:rgba(255,255,255,.09);
-    transform:translateY(-3px);
-}
-
-/* =========================
-   SECTIONS
-========================= */
-
-section{
-    padding:100px 0;
-}
-
-.section-title{
-    font-size:38px;
-    font-weight:900;
-    margin-bottom:12px;
-}
-
-.section-sub{
-    color:#85899c;
-    margin-bottom:35px;
-}
-
-/* =========================
-   GLASS CARDS
-========================= */
-
-.grid{
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:18px;
-}
-
+.brand h1{font-size:18px;margin:0}
+.brand p{font-size:12px;color:var(--muted);margin:3px 0}
 .card{
-    min-height:240px;
-
-    padding:24px;
-
-    border-radius:24px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.065),
-            rgba(255,255,255,.018)
-        );
-
-    position:relative;
-    overflow:hidden;
-
-    transition:.3s;
-
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
+  background:#131a2ddf;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:0 18px 55px #00000020;
+  backdrop-filter:blur(18px)
 }
-
-.card:hover{
-    transform:translateY(-7px);
-
-    border-color:
-        rgba(124,92,255,.45);
+button{
+  border:1px solid var(--border);
+  background:#ffffff08;color:var(--text);
+  padding:11px 14px;border-radius:12px
 }
-
-.card:after{
-    content:"";
-
-    position:absolute;
-
-    width:150px;
-    height:150px;
-
-    background:#7c5cff;
-
-    filter:blur(70px);
-
-    opacity:.1;
-
-    top:-70px;
-    left:-50px;
+button.primary{
+  background:linear-gradient(135deg,#b4a7ff,#8a7bff);
+  color:#101126;border:0;font-weight:800
 }
-
-.icon{
-    font-size:35px;
-    margin-bottom:18px;
+button:disabled{opacity:.5}
+.hidden{display:none!important}
+.view{display:none}
+.view.active{display:block}
+.login-wrap{min-height:70vh;display:grid;place-items:center}
+.login{width:min(100%,440px);padding:28px}
+.eyebrow{color:var(--mint);font-size:12px;font-weight:800}
+h2{font-size:25px;margin:8px 0}
+.description{font-size:13px;color:var(--muted);line-height:2}
+.field{margin-top:16px}
+.field label{display:block;font-size:12px;margin-bottom:7px;color:#c6cce0}
+.field input{
+  width:100%;padding:13px;border-radius:12px;
+  border:1px solid var(--border);background:#0b1120;
+  color:white;outline:none
 }
-
-.card h3{
-    font-size:21px;
-    margin-bottom:8px;
+.field input:focus,.search:focus{border-color:var(--purple)}
+.wide{width:100%;margin-top:20px}
+.notice{
+  display:none;margin-top:14px;padding:12px;
+  background:#ffbd7010;border:1px solid #ffbd7030;
+  color:#ffd5a0;border-radius:12px;font-size:12px;
+  line-height:1.9;overflow-wrap:anywhere
 }
-
-.card p{
-    color:#969aaa;
-    font-size:14px;
+.notice.show{display:block}
+.hero{
+  padding:23px;display:flex;justify-content:space-between;
+  align-items:center;gap:15px;margin-bottom:17px
 }
-
-.tag{
-    display:inline-block;
-
-    margin-top:20px;
-
-    font-size:12px;
-
-    color:#a99cff;
-
-    background:rgba(124,92,255,.1);
-
-    padding:5px 9px;
-
-    border-radius:8px;
+.hero h2{margin:6px 0}
+.hero p{margin:0;font-size:13px;color:var(--muted);line-height:1.9}
+.connection{
+  white-space:nowrap;padding:9px 12px;border-radius:30px;
+  border:1px solid #5fe1ce35;color:var(--mint);font-size:11px
 }
-
-/* =========================
-   ABOUT
-========================= */
-
-.about{
-    display:grid;
-
-    grid-template-columns:
-        1.1fr .9fr;
-
-    gap:25px;
-
-    align-items:stretch;
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:17px}
+.stat{padding:17px}
+.stat .label{font-size:12px;color:var(--muted)}
+.stat .number{font-size:28px;font-weight:800;margin-top:5px}
+.stat .small{font-size:11px;color:#8d98b7;margin-top:2px}
+.toolbar{display:flex;gap:10px;padding:14px;margin-bottom:14px}
+.search{
+  flex:1;min-width:100px;padding:11px;
+  background:#0b1120;border:1px solid var(--border);
+  border-radius:12px;color:white;outline:none
 }
-
-.panel{
-    padding:32px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:26px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.09),
-            rgba(255,255,255,.025)
-        );
-
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
-    box-shadow:
-        inset 0 1px rgba(255,255,255,.06),
-        0 20px 60px rgba(0,0,0,.15);
+select{
+  background:#0b1120;color:white;
+  border:1px solid var(--border);border-radius:12px;
+  padding:10px;max-width:180px
 }
-
-.panel p{
-    color:#a5a8b7;
+.orders{display:grid;gap:11px}
+.order{
+  padding:17px;display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:15px;align-items:center;
+  transition:.2s
 }
-
-.stats{
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:12px;
+.order:hover{border-color:#a99bff55;transform:translateY(-2px)}
+.order-title{font-weight:800;font-size:15px;overflow-wrap:anywhere}
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px 14px;
+  margin-top:9px;font-size:12px;color:var(--muted)
 }
-
-.stat{
-    padding:20px;
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,.04);
-
-    border:1px solid rgba(255,255,255,.06);
-
-    backdrop-filter:blur(12px);
+.message{font-size:12px;line-height:1.9;color:#c9d0e5;margin-top:9px;white-space:pre-wrap;overflow-wrap:anywhere}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+.badge{padding:6px 10px;border-radius:20px;font-size:11px;border:1px solid var(--border);white-space:nowrap}
+.new{color:#b7aaff;background:#a99bff12}
+.review{color:#ffd18a;background:#ffd18a12}
+.progress{color:#79d6ff;background:#79d6ff12}
+.done{color:#75e3b0;background:#75e3b012}
+.status{font-size:11px;max-width:150px}
+.empty{padding:40px 15px;text-align:center;color:var(--muted);line-height:2}
+.footer{text-align:center;margin-top:27px;font-size:11px;color:#73809f}
+.footer strong{color:var(--purple)}
+.modal{
+  display:none;position:fixed;inset:0;z-index:10;
+  background:#000b;place-items:center;padding:16px
 }
-
-.stat b{
-    display:block;
-    font-size:30px;
+.modal.show{display:grid}
+.modal-card{width:min(100%,560px);padding:22px;max-height:85vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.detail{padding:12px 0;border-bottom:1px solid var(--border)}
+.detail label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}
+.detail div{font-size:13px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#1a2440;border:1px solid var(--border);
+  padding:12px 17px;border-radius:13px;font-size:12px;
+  opacity:0;pointer-events:none;transition:.2s;z-index:20;
+  max-width:90%;text-align:center
 }
-
-.stat span{
-    color:#85899c;
-    font-size:13px;
-}
-
-/* =========================
-   EXTRA GLASS FEATURE
-========================= */
-
-.glass-feature{
-    margin-top:25px;
-
-    padding:28px;
-
-    border-radius:26px;
-
-    border:1px solid rgba(255,255,255,.1);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.1),
-            rgba(255,255,255,.025)
-        );
-
-    backdrop-filter:blur(22px);
-    -webkit-backdrop-filter:blur(22px);
-
-    position:relative;
-    overflow:hidden;
-
-    box-shadow:
-        inset 0 1px rgba(255,255,255,.08),
-        0 25px 70px rgba(0,0,0,.2);
-}
-
-.glass-feature:before{
-    content:"";
-
-    position:absolute;
-
-    width:220px;
-    height:220px;
-
-    background:#7c5cff;
-
-    filter:blur(90px);
-
-    opacity:.13;
-
-    top:-130px;
-    right:-80px;
-}
-
-.glass-feature-content{
-    position:relative;
-    z-index:2;
-}
-
-.glass-label{
-    color:#a99cff;
-    font-size:12px;
-    margin-bottom:8px;
-}
-
-.glass-feature h3{
-    font-size:25px;
-    margin-bottom:8px;
-}
-
-.glass-feature p{
-    color:#9498aa;
-    font-size:14px;
-}
-
-/* =========================
-   CTA
-========================= */
-
-.cta{
-    text-align:center;
-
-    padding:70px 25px;
-
-    border-radius:30px;
-
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(124,92,255,.2),
-            transparent 60%
-        ),
-        rgba(255,255,255,.035);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(12px);
-}
-
-.cta h2{
-    font-size:40px;
-    margin-bottom:10px;
-}
-
-.cta p{
-    color:#999dae;
-    margin-bottom:25px;
-}
-
-/* =========================
-   INNER PAGES
-========================= */
-
-.page{
-    display:none;
-
-    min-height:100vh;
-
-    padding-top:130px;
-    padding-bottom:80px;
-}
-
-.page.active{
-    display:block;
-
-    animation:pageIn .45s ease;
-}
-
-@keyframes pageIn{
-    from{
-        opacity:0;
-        transform:translateY(15px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.page-header{
-    margin-bottom:35px;
-}
-
-.page-header .badge{
-    margin-bottom:14px;
-}
-
-.page-header h2{
-    font-size:clamp(38px,7vw,65px);
-    line-height:1.1;
-}
-
-.page-header p{
-    color:#969aaa;
-    margin-top:12px;
-    max-width:700px;
-}
-
-/* project large cards */
-
-.project-list{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-}
-
-.project-card{
-    min-height:280px;
-
-    padding:30px;
-
-    border-radius:27px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.07),
-            rgba(255,255,255,.018)
-        );
-
-    backdrop-filter:blur(14px);
-
-    transition:.3s;
-}
-
-.project-card:hover{
-    transform:translateY(-7px);
-    border-color:rgba(124,92,255,.4);
-}
-
-.project-number{
-    font-size:12px;
-    color:#8172dc;
-}
-
-.project-card h3{
-    font-size:28px;
-    margin:15px 0 8px;
-}
-
-.project-card p{
-    color:#969aaa;
-    font-size:14px;
-}
-
-/* contact page */
-
-.contact-box{
-    max-width:760px;
-    margin:auto;
-}
-
-.contact-item{
-    display:flex;
-    align-items:center;
-    gap:15px;
-
-    padding:20px;
-
-    margin-bottom:12px;
-
-    border-radius:20px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:rgba(255,255,255,.035);
-
-    backdrop-filter:blur(14px);
-
-    transition:.25s;
-}
-
-.contact-item:hover{
-    transform:translateX(-5px);
-
-    background:rgba(124,92,255,.07);
-}
-
-.contact-icon{
-    width:48px;
-    height:48px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:15px;
-
-    background:rgba(124,92,255,.12);
-
-    font-size:22px;
-}
-
-.contact-item small{
-    color:#777b8d;
-    display:block;
-}
-
-.contact-item strong{
-    font-size:15px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-    padding:30px 0 45px;
-
-    color:#6f7385;
-
-    font-size:13px;
-
-    text-align:center;
-}
-
-/* =========================
-   REVEAL
-========================= */
-
-.reveal{
-    opacity:0;
-    transform:translateY(25px);
-
-    transition:.7s;
-}
-
-.reveal.show{
-    opacity:1;
-    transform:none;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:800px){
-
-    header{
-        padding:10px 14px;
-    }
-
-    nav{
-        display:none;
-    }
-
-    .menu-button{
-        display:flex;
-    }
-
-    .hero{
-        min-height:92vh;
-    }
-
-    .hero p{
-        font-size:16px;
-    }
-
-    h1{
-        letter-spacing:-2px;
-    }
-
-    .grid,
-    .about,
-    .project-list{
-        grid-template-columns:1fr;
-    }
-
-    section{
-        padding:70px 0;
-    }
-
-    .section-title{
-        font-size:31px;
-    }
-
-    .cta h2{
-        font-size:30px;
-    }
-
-    .page{
-        padding-top:120px;
-    }
-
-    .page-header h2{
-        font-size:42px;
-    }
-}
-
-/* =========================
-   SMALL MOBILE
-========================= */
-
-@media(max-width:430px){
-
-    .hero{
-        padding-top:110px;
-    }
-
-    .buttons{
-        flex-direction:column;
-    }
-
-    .btn{
-        text-align:center;
-        width:100%;
-    }
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .panel,
-    .glass-feature,
-    .project-card{
-        padding:22px;
-    }
+.toast.show{opacity:1}
+@media(max-width:700px){
+  .app{padding:15px 12px 35px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:9px}
+  .stat{padding:14px}
+  .stat .number{font-size:24px}
+  .hero{align-items:flex-start;flex-direction:column}
+  .toolbar{flex-wrap:wrap}
+  .search{flex-basis:100%}
+  .toolbar select{flex:1;max-width:none}
+  .order{grid-template-columns:1fr}
+  .side{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+  .login{padding:22px}
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<!-- =========================
-     HEADER
-========================= -->
-
-<header>
-
-    <a class="logo" href="#" onclick="showPage('home')">
-        RJF<span>8</span>
-    </a>
-
-    <nav>
-        <a href="#" onclick="showPage('home')">خانه</a>
-        <a href="#" onclick="showPage('projects')">پروژه‌ها</a>
-        <a href="#" onclick="showPage('about')">درباره من</a>
-        <a href="#" onclick="showPage('contact')">ارتباط</a>
-    </nav>
-
-    <button
-        class="menu-button"
-        id="menuButton"
-        onclick="toggleMenu()"
-        aria-label="منو"
-    >
-
-        <div class="menu-lines">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-    </button>
-
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">R8</div>
+    <div>
+      <h1>RJF8 Orders</h1>
+      <p>پنل اختصاصی مدیریت سفارش‌ها</p>
+    </div>
+  </div>
+  <button id="logout" class="hidden">خروج از حساب</button>
 </header>
 
-<!-- =========================
-     MOBILE MENU
-========================= -->
+<section id="loginView" class="view active">
+  <div class="login-wrap">
+    <div class="login card">
+      <div class="eyebrow">PRIVATE WORKSPACE · RJF8</div>
+      <h2>مدیریت سفارش‌ها</h2>
+      <p class="description">
+        با حساب مدیریتی Supabase وارد شو تا سفارش‌های سایتت را مشاهده کنی.
+      </p>
 
-<div class="mobile-menu" id="mobileMenu">
-
-    <a href="#" onclick="showPage('home');closeMenu()">
-        <div class="menu-icon">⌂</div>
-        <span>صفحه اصلی</span>
-    </a>
-
-    <a href="#" onclick="showPage('projects');closeMenu()">
-        <div class="menu-icon">🎮</div>
-        <span>پروژه‌ها</span>
-    </a>
-
-    <a href="#" onclick="showPage('about');closeMenu()">
-        <div class="menu-icon">👤</div>
-        <span>درباره من</span>
-    </a>
-
-    <a href="#" onclick="showPage('ideas');closeMenu()">
-        <div class="menu-icon">💡</div>
-        <span>آزمایشگاه ایده‌ها</span>
-    </a>
-
-    <a href="#" onclick="showPage('contact');closeMenu()">
-        <div class="menu-icon">✦</div>
-        <span>ارتباط</span>
-    </a>
-
-</div>
-
-
-<!-- =========================================================
-     HOME
-========================================================= -->
-
-<main id="homePage" class="page active">
-
-<section class="hero">
-
-    <div class="orb o1"></div>
-    <div class="orb o2"></div>
-
-    <div class="container">
-
-        <div class="hero-content reveal">
-
-            <div class="badge">
-                RJF8 • Creative Studio
-            </div>
-
-            <h1>
-                ایده‌ها را<br>
-                <span class="gradient">
-                    قابل بازی
-                </span>
-                می‌کنم.
-            </h1>
-
-            <p>
-                من رضا هستم؛ سازنده بازی‌ها و پروژه‌های خلاقانه.
-                RJF8 جایی است برای نمایش ایده‌هایی که از یک فکر ساده شروع می‌شوند
-                و به تجربه‌هایی واقعی، تعاملی و متفاوت تبدیل می‌شوند.
-            </p>
-
-            <div class="buttons">
-
-                <a
-                    class="btn primary"
-                    href="#"
-                    onclick="showPage('projects')"
-                >
-                    مشاهده پروژه‌ها ↓
-                </a>
-
-                <a
-                    class="btn secondary"
-                    href="#"
-                    onclick="showPage('about')"
-                >
-                    بیشتر درباره RJF8
-                </a>
-
-            </div>
-
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">ایمیل حساب مدیر</label>
+          <input id="email" type="email" autocomplete="username" required>
         </div>
+        <div class="field">
+          <label for="password">رمز عبور</label>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="primary wide" id="loginButton" type="submit">ورود به پنل</button>
+      </form>
 
+      <div class="notice" id="loginNotice"></div>
+      <p class="description" style="font-size:11px;margin-top:18px">
+        این اپ مستقل است؛ سفارش‌ها را از پروژهٔ Supabase سایت RJF8 می‌خواند.
+      </p>
     </div>
-
+  </div>
 </section>
 
-
-<section>
-
-    <div class="container">
-
-        <div class="reveal">
-
-            <h2 class="section-title">
-                پروژه‌های منتخب
-            </h2>
-
-            <p class="section-sub">
-                چند نمونه از چیزهایی که در RJF8 می‌توانند به واقعیت تبدیل شوند.
-            </p>
-
-        </div>
-
-
-        <div class="grid">
-
-            <article class="card reveal">
-
-                <div class="icon">
-                    🎮
-                </div>
-
-                <h3>
-                    بازی‌های خلاقانه
-                </h3>
-
-                <p>
-                    بازی‌های موبایلی و تحت وب با تمرکز روی تجربه،
-                    داستان و مکانیک‌های متفاوت.
-                </p>
-
-                <span class="tag">
-                    GAME DEV
-                </span>
-
-            </article>
-
-
-            <article class="card reveal">
-
-                <div class="icon">
-                    🌆
-                </div>
-
-                <h3>
-                    Escape from Set City
-                </h3>
-
-                <p>
-                    یک دنیای سه‌بعدی آموزشی که مفاهیم مجموعه‌ها
-                    را به قوانین واقعی بازی تبدیل می‌کند.
-                </p>
-
-                <span class="tag">
-                    3D • EDUCATION
-                </span>
-
-            </article>
-
-
-            <article class="card reveal">
-
-                <div class="icon">
-                    ⚡
-                </div>
-
-                <h3>
-                    آزمایشگاه ایده‌ها
-                </h3>
-
-                <p>
-                    پروژه‌های کوچک، تجربه‌های عجیب و ایده‌هایی که
-                    شاید روزی تبدیل به یک محصول بزرگ شوند.
-                </p>
-
-                <span class="tag">
-                    EXPERIMENTAL
-                </span>
-
-            </article>
-
-        </div>
-
-
-        <!-- GLASS FEATURE -->
-
-        <div class="glass-feature reveal">
-
-            <div class="glass-feature-content">
-
-                <div class="glass-label">
-                    RJF8 / FEATURED
-                </div>
-
-                <h3>
-                    اینجا فقط یک سایت نیست.
-                </h3>
-
-                <p>
-                    اینجا ویترین ایده‌هایی است که قرار است ساخته شوند.
-                    هر پروژه یک تجربه جدید است.
-                </p>
-
-            </div>
-
-        </div>
-
+<section id="dashboardView" class="view">
+  <div class="hero card">
+    <div>
+      <div class="eyebrow">CONTROL CENTER</div>
+      <h2>سلام! 👋</h2>
+      <p>سفارش‌هایت را بررسی کن و وضعیت هر سفارش را مدیریت کن.</p>
     </div>
+    <div class="connection" id="connection">در حال اتصال…</div>
+  </div>
 
+  <div class="stats">
+    <div class="stat card"><div class="label">همه سفارش‌ها</div><div class="number" id="allCount">—</div><div class="small">کل ثبت‌ها</div></div>
+    <div class="stat card"><div class="label">سفارش جدید</div><div class="number" id="newCount">—</div><div class="small">نیازمند بررسی</div></div>
+    <div class="stat card"><div class="label">در حال انجام</div><div class="number" id="progressCount">—</div><div class="small">سفارش‌های فعال</div></div>
+    <div class="stat card"><div class="label">تکمیل‌شده</div><div class="number" id="doneCount">—</div><div class="small">سفارش‌های تمام‌شده</div></div>
+  </div>
+
+  <div class="toolbar card">
+    <input class="search" id="search" placeholder="جست‌وجو در سفارش‌ها…">
+    <select id="filter">
+      <option value="all">همه وضعیت‌ها</option>
+      <option value="new">جدید</option>
+      <option value="review">در حال بررسی</option>
+      <option value="progress">در حال انجام</option>
+      <option value="done">تکمیل‌شده</option>
+    </select>
+    <button id="refresh">↻ تازه‌سازی</button>
+  </div>
+
+  <div id="orders" class="orders">
+    <div class="card empty">در حال دریافت سفارش‌ها…</div>
+  </div>
 </section>
 
-
-<section>
-
-    <div class="container">
-
-        <div class="cta reveal">
-
-            <h2>
-                یک ایده داری؟
-            </h2>
-
-            <p>
-                شاید پروژه بعدی RJF8 از همین‌جا شروع شود.
-            </p>
-
-            <a
-                class="btn primary"
-                href="#"
-                onclick="showPage('contact')"
-            >
-                شروع یک پروژه
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-</main>
-
-
-<!-- =========================================================
-     PROJECTS PAGE
-========================================================= -->
-
-<main id="projectsPage" class="page">
-
-<div class="container">
-
-    <div class="page-header reveal">
-
-        <div class="badge">
-            RJF8 / PROJECTS
-        </div>
-
-        <h2>
-            پروژه‌های من
-        </h2>
-
-        <p>
-            پروژه‌هایی که ساخته شده‌اند، در حال توسعه هستند
-            یا قرار است در آینده ساخته شوند.
-        </p>
-
-    </div>
-
-
-    <div class="project-list">
-
-        <article class="project-card reveal">
-
-            <div class="project-number">
-                PROJECT 01
-            </div>
-
-            <h3>
-                Escape from Set City
-            </h3>
-
-            <p>
-                یک بازی سه‌بعدی آموزشی با دنیایی بزرگ،
-                مراحل جداگانه و مکانیک‌هایی که مفاهیم مجموعه‌ها
-                را به قوانین واقعی بازی تبدیل می‌کنند.
-            </p>
-
-            <span class="tag">
-                3D GAME
-            </span>
-
-        </article>
-
-
-        <article class="project-card reveal">
-
-            <div class="project-number">
-                PROJECT 02
-            </div>
-
-            <h3>
-                RJF8 Games
-            </h3>
-
-            <p>
-                مجموعه‌ای از بازی‌های تحت وب و موبایلی
-                که با هدف تجربه سریع، سرگرم‌کننده و متفاوت ساخته می‌شوند.
-            </p>
-
-            <span class="tag">
-                WEB GAME
-            </span>
-
-        </article>
-
-
-        <article class="project-card reveal">
-
-            <div class="project-number">
-                PROJECT 03
-            </div>
-
-            <h3>
-                Experimental Lab
-            </h3>
-
-            <p>
-                جایی برای آزمایش ایده‌های عجیب، رابط‌های جدید،
-                مکانیک‌های بازی و پروژه‌هایی که هنوز اسم مشخصی ندارند.
-            </p>
-
-            <span class="tag">
-                EXPERIMENTAL
-            </span>
-
-        </article>
-
-
-        <article class="project-card reveal">
-
-            <div class="project-number">
-                PROJECT 04
-            </div>
-
-            <h3>
-                آینده RJF8
-            </h3>
-
-            <p>
-                پروژه‌های بیشتری در راه هستند.
-                این بخش با ساخته‌شدن پروژه‌های جدید به‌روزرسانی خواهد شد.
-            </p>
-
-            <span class="tag">
-                COMING SOON
-            </span>
-
-        </article>
-
-    </div>
-
+<div class="footer">ساخته‌شده برای <strong>RJF8</strong> · Orders Dashboard</div>
 </div>
 
-</main>
-
-
-<!-- =========================================================
-     ABOUT PAGE
-========================================================= -->
-
-<main id="aboutPage" class="page">
-
-<div class="container">
-
-    <div class="page-header reveal">
-
-        <div class="badge">
-            RJF8 / ABOUT
-        </div>
-
-        <h2>
-            درباره من
-        </h2>
-
-        <p>
-            پشت RJF8 یک نفر ایستاده که عاشق ساختن چیزهای جدید است.
-        </p>
-
+<div id="modal" class="modal">
+  <div class="modal-card card">
+    <div class="modal-head">
+      <h3>جزئیات سفارش</h3>
+      <button id="closeModal">بستن ✕</button>
     </div>
-
-
-    <div class="about">
-
-        <div class="panel reveal">
-
-            <h2 class="section-title">
-                من رضا هستم.
-            </h2>
-
-            <p>
-                به بازی‌سازی، طراحی، برنامه‌نویسی و تبدیل ایده‌های
-                ساده به پروژه‌های واقعی علاقه دارم.
-            </p>
-
-            <br>
-
-            <p>
-                RJF8 را ساختم تا فقط یک اسم نباشد؛
-                بلکه تبدیل شود به یک فضای شخصی برای نمایش
-                چیزهایی که می‌سازم و ایده‌هایی که در ذهن دارم.
-            </p>
-
-        </div>
-
-
-        <div class="stats reveal">
-
-            <div class="stat">
-                <b>∞</b>
-                <span>ایده برای ساختن</span>
-            </div>
-
-            <div class="stat">
-                <b>3D</b>
-                <span>دنیای تعاملی</span>
-            </div>
-
-            <div class="stat">
-                <b>24/7</b>
-                <span>آزمایش و خلاقیت</span>
-            </div>
-
-            <div class="stat">
-                <b>RJF8</b>
-                <span>برند شخصی</span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="glass-feature reveal">
-
-        <div class="glass-feature-content">
-
-            <div class="glass-label">
-                PERSONAL MOTTO
-            </div>
-
-            <h3>
-                «فقط ایده نده؛ بسازش.»
-            </h3>
-
-            <p>
-                هدف RJF8 همین است؛ ایده‌ها از ذهن خارج شوند
-                و تبدیل به چیزی شوند که بتوان آن را دید و تجربه کرد.
-            </p>
-
-        </div>
-
-    </div>
-
+    <div id="details"></div>
+  </div>
 </div>
 
-</main>
-
-
-<!-- =========================================================
-     IDEAS PAGE
-========================================================= -->
-
-<main id="ideasPage" class="page">
-
-<div class="container">
-
-    <div class="page-header reveal">
-
-        <div class="badge">
-            RJF8 / IDEAS LAB
-        </div>
-
-        <h2>
-            آزمایشگاه ایده‌ها
-        </h2>
-
-        <p>
-            اینجا جایی است که ایده‌های عجیب هنوز اجازه دارند زنده باشند.
-        </p>
-
-    </div>
-
-
-    <div class="grid">
-
-        <article class="card reveal">
-
-            <div class="icon">
-                🧪
-            </div>
-
-            <h3>
-                ایده‌های آزمایشی
-            </h3>
-
-            <p>
-                چیزهایی که شاید کوچک باشند،
-                اما ممکن است شروع یک پروژه بزرگ شوند.
-            </p>
-
-        </article>
-
-
-        <article class="card reveal">
-
-            <div class="icon">
-                🧠
-            </div>
-
-            <h3>
-                مکانیک‌های جدید
-            </h3>
-
-            <p>
-                آزمایش روش‌های تازه برای ساخت بازی‌هایی
-                که شبیه بازی‌های معمولی نباشند.
-            </p>
-
-        </article>
-
-
-        <article class="card reveal">
-
-            <div class="icon">
-                🚀
-            </div>
-
-            <h3>
-                ایده‌های آینده
-            </h3>
-
-            <p>
-                پروژه‌هایی که هنوز شروع نشده‌اند،
-                اما ممکن است به‌زودی وارد RJF8 شوند.
-            </p>
-
-        </article>
-
-    </div>
-
-</div>
-
-</main>
-
-
-<!-- =========================================================
-     CONTACT PAGE
-========================================================= -->
-
-<main id="contactPage" class="page">
-
-<div class="container">
-
-    <div class="page-header reveal">
-
-        <div class="badge">
-            RJF8 / CONTACT
-        </div>
-
-        <h2>
-            ارتباط
-        </h2>
-
-        <p>
-            برای ارتباط یا شروع یک پروژه می‌توانی از این بخش استفاده کنی.
-        </p>
-
-    </div>
-
-
-    <div class="contact-box">
-
-        <a
-            class="contact-item reveal"
-            href="mailto:rjf8@example.com"
-        >
-
-            <div class="contact-icon">
-                ✉
-            </div>
-
-            <div>
-                <small>
-                    EMAIL
-                </small>
-
-                <strong>
-                    rjf8@example.com
-                </strong>
-            </div>
-
-        </a>
-
-
-        <div class="contact-item reveal">
-
-            <div class="contact-icon">
-                ✦
-            </div>
-
-            <div>
-                <small>
-                    BRAND
-                </small>
-
-                <strong>
-                    RJF8 Creative Studio
-                </strong>
-            </div>
-
-        </div>
-
-
-        <div class="glass-feature reveal">
-
-            <div class="glass-feature-content">
-
-                <div class="glass-label">
-                    LET'S CREATE
-                </div>
-
-                <h3>
-                    آماده ساختن چیز بعدی هستیم.
-                </h3>
-
-                <p>
-                    این قسمت بعداً می‌تواند به شبکه‌های اجتماعی،
-                    فرم تماس یا هر سرویس دیگری که بخواهی متصل شود.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</main>
-
-
-<footer>
-    © 2026 RJF8 — ساخته‌شده برای ایده‌های بزرگ.
-</footer>
-
+<div id="toast" class="toast"></div>
 
 <script>
+/* اطلاعات پروژه Supabase سایت RJF8 */
+const SUPABASE_URL = "https://gbuomuxrgmombwgsftce.supabase.co";
+const SUPABASE_KEY = "sb_publishable_HK5sAbMVgWYoLqVkhft57Q_bjCwAlGg";
+const TABLE = "orders";
 
-/* =========================================================
-   PAGE SYSTEM
-========================================================= */
+/*
+  وضعیت‌های اپ.
+  برای ذخیره دائمی وضعیت‌ها، ستون status باید در جدول orders ایجاد شود.
+*/
+const STATUSES = {
+  new:      {label:"جدید", cls:"new"},
+  review:   {label:"در حال بررسی", cls:"review"},
+  progress: {label:"در حال انجام", cls:"progress"},
+  done:     {label:"تکمیل‌شده", cls:"done"}
+};
 
-function showPage(pageName){
+const $ = id => document.getElementById(id);
+let supabaseClient = null;
+let user = null;
+let orders = [];
+let realtime = null;
+let toastTimer = null;
 
-    const pages = [
-        "home",
-        "projects",
-        "about",
-        "ideas",
-        "contact"
-    ];
-
-    pages.forEach(function(page){
-
-        const element =
-            document.getElementById(page + "Page");
-
-        if(element){
-            element.classList.remove("active");
-        }
-
-    });
-
-
-    const selected =
-        document.getElementById(pageName + "Page");
-
-    if(selected){
-        selected.classList.add("active");
-    }
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-
-    setTimeout(function(){
-
-        selected
-        ?.querySelectorAll(".reveal")
-        .forEach(function(element){
-
-            element.classList.add("show");
-
-        });
-
-    },120);
-
+function toast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3200);
 }
 
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-function toggleMenu(){
-
-    const menu =
-        document.getElementById("mobileMenu");
-
-    const button =
-        document.getElementById("menuButton");
-
-    menu.classList.toggle("open");
-
-    button.classList.toggle("active");
-
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
 }
 
-
-function closeMenu(){
-
-    const menu =
-        document.getElementById("mobileMenu");
-
-    const button =
-        document.getElementById("menuButton");
-
-    menu.classList.remove("open");
-
-    button.classList.remove("active");
-
+function dateText(value) {
+  if (!value) return "نامشخص";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("fa-IR", {
+    dateStyle:"medium", timeStyle:"short"
+  }).format(date);
 }
 
+function statusOf(order) {
+  return STATUSES[order.status] ? order.status : "new";
+}
 
-/* =========================================================
-   CLOSE MENU WHEN CLICKING OUTSIDE
-========================================================= */
+function setView(view) {
+  $("loginView").classList.toggle("active", view === "login");
+  $("dashboardView").classList.toggle("active", view === "dashboard");
+  $("logout").classList.toggle("hidden", view !== "dashboard");
+}
 
-document.addEventListener("click",function(event){
+function showLoginError(message) {
+  $("loginNotice").textContent = message;
+  $("loginNotice").classList.add("show");
+}
 
-    const menu =
-        document.getElementById("mobileMenu");
+function updateStats() {
+  $("allCount").textContent = orders.length;
+  $("newCount").textContent = orders.filter(o => statusOf(o) === "new").length;
+  $("progressCount").textContent = orders.filter(o => statusOf(o) === "progress").length;
+  $("doneCount").textContent = orders.filter(o => statusOf(o) === "done").length;
+}
 
-    const button =
-        document.getElementById("menuButton");
+function renderOrders() {
+  updateStats();
 
-    if(
-        menu.classList.contains("open") &&
-        !menu.contains(event.target) &&
-        !button.contains(event.target)
-    ){
+  const query = $("search").value.trim().toLocaleLowerCase("fa");
+  const filter = $("filter").value;
 
-        closeMenu();
+  const filtered = orders.filter(o => {
+    const searchable = [o.name, o.email, o.service, o.message]
+      .map(v => String(v || "").toLocaleLowerCase("fa"))
+      .join(" ");
+    return (!query || searchable.includes(query)) &&
+           (filter === "all" || statusOf(o) === filter);
+  });
 
-    }
+  const container = $("orders");
 
-});
+  if (!filtered.length) {
+    container.innerHTML = `
+      <div class="card empty">
+        <div style="font-size:28px">⌁</div>
+        سفارشی برای نمایش پیدا نشد.
+      </div>`;
+    return;
+  }
 
+  container.innerHTML = filtered.map(o => {
+    const status = statusOf(o);
+    const info = STATUSES[status];
 
-/* =========================================================
-   ORIGINAL REVEAL ANIMATION
-========================================================= */
+    return `
+      <article class="order card">
+        <div>
+          <div class="order-title">${escapeHTML(o.service || "سفارش بدون عنوان")}</div>
+          <div class="meta">
+            <span>👤 ${escapeHTML(o.name || "بدون نام")}</span>
+            <span>✉ ${escapeHTML(o.email || "بدون ایمیل")}</span>
+            <span>◷ ${escapeHTML(dateText(o.created_at))}</span>
+          </div>
+          ${o.message ? `<div class="message">${escapeHTML(o.message.length > 200 ? o.message.slice(0,200)+"…" : o.message)}</div>` : ""}
+        </div>
 
-const items =
-    document.querySelectorAll(".reveal");
+        <div class="side">
+          <span class="badge ${info.cls}">${info.label}</span>
+          <select class="status" data-status-id="${escapeHTML(o.id)}" aria-label="وضعیت سفارش">
+            ${Object.entries(STATUSES).map(([key,value]) =>
+              `<option value="${key}" ${status === key ? "selected" : ""}>${value.label}</option>`
+            ).join("")}
+          </select>
+          <button data-detail-id="${escapeHTML(o.id)}">جزئیات ←</button>
+        </div>
+      </article>`;
+  }).join("");
 
+  container.querySelectorAll("[data-status-id]").forEach(el => {
+    el.addEventListener("change", () => updateStatus(el.dataset.statusId, el.value, el));
+  });
 
-const observer =
-    new IntersectionObserver(
-        function(entries){
+  container.querySelectorAll("[data-detail-id]").forEach(el => {
+    el.addEventListener("click", () => showDetails(el.dataset.detailId));
+  });
+}
 
-            entries.forEach(function(entry){
+function showDetails(id) {
+  const order = orders.find(o => String(o.id) === String(id));
+  if (!order) return;
 
-                if(entry.isIntersecting){
+  const rows = [
+    ["شناسه", order.id],
+    ["نام مشتری", order.name],
+    ["ایمیل", order.email],
+    ["خدمت", order.service],
+    ["زمان ثبت", dateText(order.created_at)],
+    ["وضعیت", STATUSES[statusOf(order)].label],
+    ["توضیحات", order.message]
+  ];
 
-                    entry.target.classList.add("show");
+  $("details").innerHTML = rows.map(([label,value]) => `
+    <div class="detail">
+      <label>${escapeHTML(label)}</label>
+      <div>${escapeHTML(value || "—")}</div>
+    </div>`).join("");
 
-                }
+  $("modal").classList.add("show");
+}
 
+async function updateStatus(id, status, select) {
+  select.disabled = true;
+
+  try {
+    const { error } = await supabaseClient
+      .from(TABLE)
+      .update({status})
+      .eq("id", id);
+
+    if (error) throw error;
+
+    const order = orders.find(o => String(o.id) === String(id));
+    if (order) order.status = status;
+
+    renderOrders();
+    toast("وضعیت سفارش ذخیره شد.");
+  } catch (error) {
+    console.error(error);
+    select.disabled = false;
+    toast("ذخیره وضعیت ناموفق بود. ستون status و مجوزهای دیتابیس را بررسی کن.");
+  }
+}
+
+async function loadOrders() {
+  $("orders").innerHTML = '<div class="card empty">در حال دریافت سفارش‌ها…</div>';
+
+  try {
+    const {data,error} = await supabaseClient
+      .from(TABLE)
+      .select("*")
+      .order("created_at", {ascending:false});
+
+    if (error) throw error;
+
+    orders = data || [];
+    renderOrders();
+    $("connection").textContent = "متصل به Supabase";
+  } catch (error) {
+    console.error(error);
+    $("orders").innerHTML = `
+      <div class="card empty">
+        دریافت سفارش‌ها ناموفق بود.<br>
+        <small>تنظیمات RLS، مجوز SELECT و نام جدول orders را بررسی کن.</small>
+      </div>`;
+    $("connection").textContent = "خطا در دریافت";
+  }
+}
+
+function connectRealtime() {
+  if (realtime) supabaseClient.removeChannel(realtime);
+
+  realtime = supabaseClient
+    .channel("rjf8-orders-feed")
+    .on("postgres_changes", {
+      event:"*",
+      schema:"public",
+      table:TABLE
+    }, payload => {
+      if (payload.eventType === "INSERT") {
+        toast("سفارش جدید دریافت شد ✨");
+
+        if ("Notification" in window &&
+            Notification.permission === "granted" &&
+            document.hidden) {
+          try {
+            new Notification("سفارش جدید RJF8", {
+              body: (payload.new.service || "سفارش جدید") +
+                    " — " + (payload.new.name || "مشتری")
             });
-
-        },
-        {
-            threshold:.12
+          } catch {}
         }
+      }
+      loadOrders();
+    })
+    .subscribe(state => {
+      if (state === "SUBSCRIBED") {
+        $("connection").textContent = "اتصال زنده فعال";
+      }
+      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") {
+        $("connection").textContent = "بررسی اتصال زنده";
+      }
+    });
+}
+
+async function openDashboard(session) {
+  user = session.user;
+  setView("dashboard");
+  await loadOrders();
+  connectRealtime();
+
+  if ("Notification" in window && Notification.permission === "default") {
+    try { await Notification.requestPermission(); } catch {}
+  }
+}
+
+async function initialize() {
+  if (!window.supabase) {
+    showLoginError("کتابخانه Supabase بارگذاری نشد. اتصال اینترنت را بررسی کن.");
+    return;
+  }
+
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+  const {data,error} = await supabaseClient.auth.getSession();
+
+  if (error) {
+    showLoginError(error.message);
+    return;
+  }
+
+  if (data.session) await openDashboard(data.session);
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  $("loginButton").disabled = true;
+  $("loginButton").textContent = "در حال ورود…";
+  $("loginNotice").classList.remove("show");
+
+  try {
+    const {data,error} = await supabaseClient.auth.signInWithPassword({
+      email:$("email").value.trim(),
+      password:$("password").value
+    });
+
+    if (error) throw error;
+
+    await openDashboard(data.session);
+    toast("با موفقیت وارد شدی.");
+  } catch (error) {
+    showLoginError(
+      "ورود ناموفق بود. ایمیل و رمز حساب Supabase را بررسی کن. " +
+      (error.message || "")
     );
-
-
-items.forEach(function(item){
-
-    observer.observe(item);
-
+  } finally {
+    $("loginButton").disabled = false;
+    $("loginButton").textContent = "ورود به پنل";
+  }
 });
 
+$("logout").addEventListener("click", async () => {
+  if (realtime) {
+    await supabaseClient.removeChannel(realtime);
+    realtime = null;
+  }
 
-/* =========================================================
-   INITIAL
-========================================================= */
-
-window.addEventListener("load",function(){
-
-    document
-        .querySelectorAll("#homePage .reveal")
-        .forEach(function(element){
-
-            element.classList.add("show");
-
-        });
-
+  await supabaseClient.auth.signOut();
+  orders = [];
+  user = null;
+  setView("login");
+  $("connection").textContent = "خارج شدی";
 });
 
+$("refresh").addEventListener("click", loadOrders);
+$("search").addEventListener("input", renderOrders);
+$("filter").addEventListener("change", renderOrders);
+$("closeModal").addEventListener("click", () => $("modal").classList.remove("show"));
+$("modal").addEventListener("click", e => {
+  if (e.target === $("modal")) $("modal").classList.remove("show");
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && user) loadOrders();
+});
+
+initialize();
 </script>
-
 </body>
 </html>
